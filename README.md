@@ -1,2 +1,4 @@
-# webgl-earth-and-moon
-A small webgl program with a simple simulation of the earth and moon
+# Earth & Moon
+_by @demiurgosoft and @softwarejimenez_
+Un simple simulador de tierra y luna con webgl
+Para probarlo, simplemente hay que abrir index.html con un navegador compatible
