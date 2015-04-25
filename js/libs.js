@@ -1,6 +1,59 @@
 //by @demiurgosoft and @softwarejimenez
 
 var LIBS={
+
+
+    getContext:function (CANVAS){
+        try {
+          var GL;
+          GL = CANVAS.getContext("experimental-webgl", {antialias: true});
+          return GL;
+        } catch (e) {
+          alert("You are not webgl compatible :(") ;
+          return false;
+        }
+
+    },
+
+    /*========================= CAPTURE MOUSE EVENTS ========================= */
+    gestionarEventos:function (raton,CANVAS){
+        raton.drag=false;
+        var old_x, old_y;
+        raton.dX=0;
+        raton.dY=0;
+
+        var mouseDown=function(e) {
+          raton.drag=true;
+          old_x=e.pageX, old_y=e.pageY;
+          e.preventDefault();
+          return false;
+        }
+
+        var mouseUp=function(e){
+          raton.drag=false;
+        }
+
+        var mouseMove=function(e) {
+          if (!raton.drag) return false;
+          raton.dX=(e.pageX-old_x)*Math.PI/CANVAS.width,raton.dY=(e.pageY-old_y)*Math.PI/CANVAS.height;
+          raton.THETA+=raton.dX;
+          raton.PHI+=raton.dY;
+          old_x=e.pageX, old_y=e.pageY;
+          e.preventDefault();
+        }
+
+        CANVAS.addEventListener("mousedown", mouseDown, false);
+        CANVAS.addEventListener("mouseup", mouseUp, false);
+        CANVAS.addEventListener("mouseout", mouseUp, false);
+        CANVAS.addEventListener("mousemove", mouseMove, false);
+
+    },
+    editCanvas: function (CANVAS,id){
+        CANVAS=document.getElementById(id);
+        CANVAS.width=window.innerWidth;
+        CANVAS.height=window.innerHeight;
+        return CANVAS;
+    },
   degToRad: function(angle){
     return(angle*Math.PI/180);
   },
