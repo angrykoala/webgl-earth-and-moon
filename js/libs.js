@@ -9,6 +9,7 @@ var raton = {
     AMORTIZATION: 0.95,
     THETA: 0,
     PHI: 0,
+    click: false,
     gestionarEventos: function(CANVAS) {
         raton.drag = false;
         var old_x, old_y;
@@ -24,6 +25,8 @@ var raton = {
 
         var mouseUp = function(e) {
             raton.drag = false;
+            if (raton.click) raton.click = false;
+            else raton.click = true;
         };
 
         var mouseMove = function(e) {
@@ -37,7 +40,6 @@ var raton = {
 
         CANVAS.addEventListener("mousedown", mouseDown, false);
         CANVAS.addEventListener("mouseup", mouseUp, false);
-        CANVAS.addEventListener("mouseout", mouseUp, false);
         CANVAS.addEventListener("mousemove", mouseMove, false);
     }
 };
@@ -103,9 +105,7 @@ var LIBS = {
     rotateX: function(m, angle) {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
-        var mv1 = m[1],
-            mv5 = m[5],
-            mv9 = m[9];
+        var mv1 = m[1],mv5 = m[5],mv9 = m[9];
         m[1] = m[1] * c - m[2] * s;
         m[5] = m[5] * c - m[6] * s;
         m[9] = m[9] * c - m[10] * s;
@@ -118,9 +118,7 @@ var LIBS = {
     rotateY: function(m, angle) {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
-        var mv0 = m[0],
-            mv4 = m[4],
-            mv8 = m[8];
+        var mv0 = m[0],mv4 = m[4],mv8 = m[8];
         m[0] = c * m[0] + s * m[2];
         m[4] = c * m[4] + s * m[6];
         m[8] = c * m[8] + s * m[10];
@@ -133,9 +131,7 @@ var LIBS = {
     rotateZ: function(m, angle) {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
-        var mv0 = m[0],
-            mv4 = m[4],
-            mv8 = m[8];
+        var mv0 = m[0],mv4 = m[4],mv8 = m[8];
         m[0] = c * m[0] - s * m[1];
         m[4] = c * m[4] - s * m[5];
         m[8] = c * m[8] - s * m[9];
@@ -148,6 +144,12 @@ var LIBS = {
     //a partir de una matriz calcula la matriz de traslacion en el eje z.
     translateZ: function(m, t) {
         m[14] += t;
+    },
+    set_position: function(m, x, y, z) {
+        m[12] = x, m[13] = y, m[14] = z;
+    },
+    translateX: function(m, t) {
+        m[12] += t;
     }
 };
 
@@ -230,57 +232,56 @@ var shaders = {
 //con las variables de identificadores de buffer de vertices y caras
 //definimos las coordenasda de los vertices y de textura
 //creamos los identificadores de los buffer
-var modelo={
-    CUBE_VERTEX:null,
-    CUBE_FACES:null,
-    defModelo:function (GL) {
+var modelo = {
+    CUBE_VERTEX: null,
+    CUBE_FACES: null,
+    defModelo: function(GL) {
 
-    var latitudeBands =10;
-    var longitudeBands = 10;
-    var radius = 2;
+        var latitudeBands = 10;
+        var longitudeBands = 10;
+        var radius = 2;
 
-    var cube_vertex = [];
-    for (var latNumber=0; latNumber <= latitudeBands; latNumber++) {
-        var theta = latNumber * Math.PI / latitudeBands;
-        var sinTheta = Math.sin(theta);
-        var cosTheta = Math.cos(theta);
+        var cube_vertex = [];
+        for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+            var theta = latNumber * Math.PI / latitudeBands;
+            var sinTheta = Math.sin(theta);
+            var cosTheta = Math.cos(theta);
 
-        for (var longNumber=0; longNumber <= longitudeBands; longNumber++) {
-            var phi = longNumber * 2 * Math.PI / longitudeBands;
-            var sinPhi = Math.sin(phi);
-            var cosPhi = Math.cos(phi);
+            for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+                var phi = longNumber * 2 * Math.PI / longitudeBands;
+                var sinPhi = Math.sin(phi);
+                var cosPhi = Math.cos(phi);
 
-            var x = cosPhi * sinTheta;
-            var y = cosTheta;
-            var z = sinPhi * sinTheta;
-            var u = 1 - (longNumber / longitudeBands);
-            var v = 1 - (latNumber / latitudeBands);
+                var x = cosPhi * sinTheta;
+                var y = cosTheta;
+                var z = sinPhi * sinTheta;
+                var u = 1 - (longNumber / longitudeBands);
+                var v = 1 - (latNumber / latitudeBands);
 
-            //coordenadas vertices
-            cube_vertex.push(radius * x);
-            cube_vertex.push(radius * y);
-            cube_vertex.push(radius * z);
+                //coordenadas vertices
+                cube_vertex.push(radius * x);
+                cube_vertex.push(radius * y);
+                cube_vertex.push(radius * z);
 
-            //coordenas textura
-            cube_vertex.push(u);
-            cube_vertex.push(v);
+                //coordenas textura
+                cube_vertex.push(u);
+                cube_vertex.push(v);
 
+            }
         }
-    }
-/*
+        /*
+        for(var i=0;i<cube_vertex.length;i+=5){
+            console.log(cube_vertex[i]+" "+" "+cube_vertex[i+1]+" "+" "+cube_vertex[i+2]);
+            console.log(cube_vertex[i+3]+" "+" "+cube_vertex[i+4]);
+        }*/
+        modelo.CUBE_VERTEX = GL.createBuffer();
+        GL.bindBuffer(GL.ARRAY_BUFFER, modelo.CUBE_VERTEX);
+        GL.bufferData(GL.ARRAY_BUFFER, new Float32Array(cube_vertex), GL.STATIC_DRAW);
 
-    for(var i=0;i<cube_vertex.length;i+=5){
-        console.log(cube_vertex[i]+" "+" "+cube_vertex[i+1]+" "+" "+cube_vertex[i+2]);
-        console.log(cube_vertex[i+3]+" "+" "+cube_vertex[i+4]);
-    }*/
-    modelo.CUBE_VERTEX = GL.createBuffer();
-    GL.bindBuffer(GL.ARRAY_BUFFER, modelo.CUBE_VERTEX);
-    GL.bufferData(GL.ARRAY_BUFFER, new Float32Array(cube_vertex), GL.STATIC_DRAW);
-
-    //FACES :
-    var cube_faces = [];
-        for (var latNumber=0; latNumber < latitudeBands; latNumber++) {
-            for (var longNumber=0; longNumber < longitudeBands; longNumber++) {
+        //FACES :
+        var cube_faces = [];
+        for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+            for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
                 var first = (latNumber * (longitudeBands + 1)) + longNumber;
                 var second = first + longitudeBands + 1;
                 cube_faces.push(first);
@@ -292,47 +293,30 @@ var modelo={
                 cube_faces.push(first + 1);
             }
         }
-        console.log(cube_faces.length);
-    modelo.CUBE_FACES = GL.createBuffer();
-    GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES);
-    GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(cube_faces), GL.STATIC_DRAW);
-}
-
+        modelo.CUBE_FACES = GL.createBuffer();
+        GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES);
+        GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(cube_faces), GL.STATIC_DRAW);
+    }
 };
 
 
 
 /*========================= TEXTURES ========================= */
 //creamos la textura a paritr de una imagen.
-var texture={
-    get_texture:function (image_URL,GL) {
-
-
+var texture = {
+    get_texture: function(image_URL, GL) {
         var image = new Image();
-
         image.src = image_URL;
         image.webglTexture = false;
-
-
         image.onload = function(e) {
-
             var texture = GL.createTexture();
-
             GL.pixelStorei(GL.UNPACK_FLIP_Y_WEBGL, true);
-
-
             GL.bindTexture(GL.TEXTURE_2D, texture);
-
             GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image);
-
             GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
-
             GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST_MIPMAP_LINEAR);
-
             GL.generateMipmap(GL.TEXTURE_2D);
-
             GL.bindTexture(GL.TEXTURE_2D, null);
-
             image.webglTexture = texture;
         };
         return image;
