@@ -16,7 +16,7 @@ function main() {
         GL.vertexAttribPointer(shaders._uv, 2, GL.FLOAT, false, 4 * (3 + 2), 3 * 4);//le pasmaos al shader las coordenadas de textrua
 
         GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES);//tomamos el identificador del buffer de las caras
-        GL.drawElements(GL.TRIANGLES, 6 * 2 * 3, GL.UNSIGNED_SHORT, 0);//dibujamos.
+        GL.drawElements(GL.TRIANGLES, 10*10*3*2, GL.UNSIGNED_SHORT, 0);//dibujamos.
     }
 
 
@@ -29,11 +29,11 @@ function main() {
     var PROJMATRIX = LIBS.get_projection(40, CANVAS.width / CANVAS.height, 1, 100);
     var MOVEMATRIX = LIBS.get_I4();
     var VIEWMATRIX = LIBS.get_I4();
-    LIBS.translateZ(VIEWMATRIX, -6);//traslademos el mundo al (0,0,-6)
+    LIBS.translateZ(VIEWMATRIX, -20);//traslademos el mundo al (0,0,-6)
     raton.gestionarEventos(CANVAS);
     shaders.gestionShaders(GL);
     modelo.defModelo(GL);
-    var cube_texture = texture.get_texture("img/texture.png",GL);
+    var cube_texture = texture.get_texture("img/moon.gif",GL);
     /*========================= DRAWING ========================= */
     GL.enable(GL.DEPTH_TEST);
     GL.depthFunc(GL.LEQUAL);

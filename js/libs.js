@@ -231,90 +231,68 @@ var shaders = {
 //definimos las coordenasda de los vertices y de textura
 //creamos los identificadores de los buffer
 var modelo={
-CUBE_VERTEX:null,
-CUBE_FACES:null,
-defModelo:function (GL) {
-    //POINTS :
-    var cube_vertex = [
-        -1, -1, -1,
-        0, 0,
-        1, -1, -1,
-        1, 0,
-        1, 1, -1,
-        1, 1,
-        -1, 1, -1,
-        0, 1,
+    CUBE_VERTEX:null,
+    CUBE_FACES:null,
+    defModelo:function (GL) {
 
-        -1, -1, 1,
-        0, 0,
-        1, -1, 1,
-        1, 0,
-        1, 1, 1,
-        1, 1,
-        -1, 1, 1,
-        0, 1,
+    var latitudeBands =10;
+    var longitudeBands = 10;
+    var radius = 2;
 
-        -1, -1, -1,
-        0, 0,
-        -1, 1, -1,
-        1, 0,
-        -1, 1, 1,
-        1, 1,
-        -1, -1, 1,
-        0, 1,
+    var cube_vertex = [];
+    for (var latNumber=0; latNumber <= latitudeBands; latNumber++) {
+        var theta = latNumber * Math.PI / latitudeBands;
+        var sinTheta = Math.sin(theta);
+        var cosTheta = Math.cos(theta);
 
-        1, -1, -1,
-        0, 0,
-        1, 1, -1,
-        1, 0,
-        1, 1, 1,
-        1, 1,
-        1, -1, 1,
-        0, 1,
+        for (var longNumber=0; longNumber <= longitudeBands; longNumber++) {
+            var phi = longNumber * 2 * Math.PI / longitudeBands;
+            var sinPhi = Math.sin(phi);
+            var cosPhi = Math.cos(phi);
 
-        -1, -1, -1,
-        0, 0,
-        -1, -1, 1,
-        1, 0,
-        1, -1, 1,
-        1, 1,
-        1, -1,
-        -1, 0, 1,
-        -1, 1,
-        -1, 0, 0,
-        -1, 1, 1,
-        1, 0,
-        1, 1, 1,
-        1, 1,
-        1, 1, -1,
-        0, 1
-    ];
+            var x = cosPhi * sinTheta;
+            var y = cosTheta;
+            var z = sinPhi * sinTheta;
+            var u = 1 - (longNumber / longitudeBands);
+            var v = 1 - (latNumber / latitudeBands);
 
+            //coordenadas vertices
+            cube_vertex.push(radius * x);
+            cube_vertex.push(radius * y);
+            cube_vertex.push(radius * z);
+
+            //coordenas textura
+            cube_vertex.push(u);
+            cube_vertex.push(v);
+
+        }
+    }
+/*
+
+    for(var i=0;i<cube_vertex.length;i+=5){
+        console.log(cube_vertex[i]+" "+" "+cube_vertex[i+1]+" "+" "+cube_vertex[i+2]);
+        console.log(cube_vertex[i+3]+" "+" "+cube_vertex[i+4]);
+    }*/
     modelo.CUBE_VERTEX = GL.createBuffer();
     GL.bindBuffer(GL.ARRAY_BUFFER, modelo.CUBE_VERTEX);
     GL.bufferData(GL.ARRAY_BUFFER, new Float32Array(cube_vertex), GL.STATIC_DRAW);
 
     //FACES :
-    var cube_faces = [
-        0, 1, 2,
-        0, 2, 3,
+    var cube_faces = [];
+        for (var latNumber=0; latNumber < latitudeBands; latNumber++) {
+            for (var longNumber=0; longNumber < longitudeBands; longNumber++) {
+                var first = (latNumber * (longitudeBands + 1)) + longNumber;
+                var second = first + longitudeBands + 1;
+                cube_faces.push(first);
+                cube_faces.push(second);
+                cube_faces.push(first + 1);
 
-        4, 5, 6,
-        4, 6, 7,
-
-        8, 9, 10,
-        8, 10, 11,
-
-        12, 13, 14,
-        12, 14, 15,
-
-        16, 17, 18,
-        16, 18, 19,
-
-        20, 21, 22,
-        20, 22, 23
-
-    ];
+                cube_faces.push(second);
+                cube_faces.push(second + 1);
+                cube_faces.push(first + 1);
+            }
+        }
+        console.log(cube_faces.length);
     modelo.CUBE_FACES = GL.createBuffer();
     GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES);
     GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(cube_faces), GL.STATIC_DRAW);
