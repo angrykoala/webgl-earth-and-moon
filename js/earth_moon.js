@@ -1,6 +1,5 @@
 //by @demiurgosoft and @softwarejimenez
 function main() {
-
     function draw(texture1, texture2) {
         GL.viewport(0.0, 0.0, CANVAS.width, CANVAS.height); //definimos el viewport
         GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
@@ -18,7 +17,7 @@ function main() {
         GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES); //tomamos el identificador del buffer de las caras
         GL.drawElements(GL.TRIANGLES, 10 * 10 * 3 * 2, GL.UNSIGNED_SHORT, 0); //dibujamos.
 
-        //pintamos segundoa esfera con distinta matrix de modelo y textura
+        //pintamos segunda esfera con distinta matrix de modelo y textura
         if (texture2.webglTexture) { //le pasamos la textura
             GL.activeTexture(GL.TEXTURE0);
             GL.bindTexture(GL.TEXTURE_2D, texture2.webglTexture);
