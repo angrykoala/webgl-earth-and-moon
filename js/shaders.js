@@ -17,19 +17,33 @@ var shaders = {
       uniform mat4 Mmatrix;\n\
       attribute vec2 uv;\n\
       varying vec2 vUV;\n\
+      //varying highp vec2 vTextureCoord;\n\
+     // varying highp vec3 vLighting;\n\
+      \n\
       void main(void) { //pre-built function\n\
+        //highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);\n\
+        //highp vec3 directionalLightColor = vec3(0.5, 0.5, 0.75);\n\
+        //highp vec3 directionalVector = vec3(0.85, 0.8, 0.75);\n\
+        //highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 1.0);\n\
+        //highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);\n\
+        //vLighting = ambientLight + (directionalLightColor * directional);\n\
+
       gl_Position = Pmatrix*Vmatrix*Mmatrix*vec4(position, 1.);\n\
       vUV=uv;\n\
       }";
 
         var shader_fragment_source = "\n\
-      precision mediump float;\n\
-      uniform sampler2D sampler;\n\
-      varying vec2 vUV;\n\
+        //varying highp vec2 vTextureCoord;\n\
+        //varying highp vec3 vLighting;\n\
+        precision mediump float;\n\
+        uniform sampler2D sampler;\n\
+        varying vec2 vUV;\n\
       \n\
       \n\
       void main(void) {\n\
-      gl_FragColor = texture2D(sampler, vUV);\n\
+          //mediump vec4 texelColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+          //gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
+          gl_FragColor = texture2D(sampler, vUV);\n\
       }";
 
         function get_shader(source, type, typeString) {
