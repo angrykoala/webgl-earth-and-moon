@@ -35,6 +35,11 @@ var modelo = {
                 cube_vertex.push(radius * y);
                 cube_vertex.push(radius * z);
 
+                //normales
+                cube_vertex.push(x);
+                cube_vertex.push(y);
+                cube_vertex.push(z);
+
                 //coordenas textura
                 cube_vertex.push(u);
                 cube_vertex.push(v);

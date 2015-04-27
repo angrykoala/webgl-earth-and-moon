@@ -11,8 +11,9 @@ function main() {
             GL.bindTexture(GL.TEXTURE_2D, texture1.webglTexture);
         }
         GL.bindBuffer(GL.ARRAY_BUFFER, modelo.CUBE_VERTEX); //tomamos el identificador del buffer de vertices
-        GL.vertexAttribPointer(shaders._position, 3, GL.FLOAT, false, 4 * (3 + 2), 0); //le pasamos al shader las coordenadas de lso vertices
-        GL.vertexAttribPointer(shaders._uv, 2, GL.FLOAT, false, 4 * (3 + 2), 3 * 4); //le pasmaos al shader las coordenadas de textrua
+        GL.vertexAttribPointer(shaders._position, 3, GL.FLOAT, false, 4*(3+3+2), 0); //le pasamos al shader las coordenadas de lso vertices
+        GL.vertexAttribPointer(shaders._normal, 3, GL.FLOAT, false,4*(3+3+2),3*4) ;//le pasamos al shader las normales
+        GL.vertexAttribPointer(shaders._uv, 2, GL.FLOAT, false, 4*(3+3+2), (3+3)*4); //le pasmaos al shader las coordenadas de textrua
 
         GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, modelo.CUBE_FACES); //tomamos el identificador del buffer de las caras
         GL.drawElements(GL.TRIANGLES, 10 * 10 * 3 * 2, GL.UNSIGNED_SHORT, 0); //dibujamos.
