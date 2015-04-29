@@ -35,7 +35,7 @@ var shaders = {
         varying vec3 vNormal;\n\
         varying vec3 vView;\n\
         const vec3 source_ambient_color=vec3(1.,1.,1.);\n\
-        const vec3 source_diffuse_color=vec3(1.,2.,4.);\n\
+        const vec3 source_diffuse_color=vec3(1.,1.,1.);\n\
         const vec3 source_specular_color=vec3(1.,1.,1.);\n\
         const vec3 source_direction=vec3(0.,0.,1.);\n\
         \n\
