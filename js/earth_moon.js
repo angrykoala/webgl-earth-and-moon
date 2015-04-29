@@ -6,9 +6,11 @@ function main() {
     CANVAS = LIBS.editCanvas(CANVAS, "your_canvas");
     GL = LIBS.getContext(CANVAS);
 
-
-    var tierra = new modelo();
-    var luna = new modelo();
+    var resx = 20;
+    var resy = 20;
+    var radius = 2;
+    var tierra = new planeta(GL,resx,resy,radius,"img/earth.jpg");
+    var luna = new satelite(GL,resx,resy,radius-1,"img/moon.gif");
 
 
     var angle=40;
@@ -18,13 +20,6 @@ function main() {
 
     raton.gestionarEventos(CANVAS);
     shaders.gestionShaders(GL);
-    var resx = 20;
-    var resy = 20;
-    var radius = 2;
-    tierra.defModelo(GL,resx,resy,radius);
-    luna.defModelo(GL,resx,resy,radius-1);
-    var texture_earth = texture.get_texture("img/earth.jpg", GL);
-    var texture_moon = texture.get_texture("img/moon.gif", GL);
     /*========================= DRAWING ========================= */
     GL.enable(GL.DEPTH_TEST);
     GL.depthFunc(GL.LEQUAL);
@@ -37,12 +32,12 @@ function main() {
         var dt = time - time_old;
         time_old = time;
         matrix.gestionraton();
-        matrix.rotacionTierra(dt);
-        matrix.rotacionLuna();
+        tierra.rotacion(dt);
+        luna.rotacion();
         matrix.pasarMatricesShader(GL,CANVAS);
 
-        tierra.draw(texture_earth,matrix.MOVEMATRIX);
-        luna.draw(texture_moon,matrix.MOVEMATRIX2);
+        tierra.draw();
+        luna.draw();
         GL.flush();
         window.requestAnimationFrame(animate);
         //si queremos que no se anume window.requestAnimationFrame(animate(0));
