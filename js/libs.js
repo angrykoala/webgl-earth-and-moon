@@ -1,32 +1,10 @@
 //by @demiurgosoft and @softwarejimenez
-
-
 //recoge un conjunto de funciones basicas.
 var LIBS = {
-
-    //crea el contexto de openGL
-    getContext: function(CANVAS) {
-        try {
-            return GL = CANVAS.getContext("experimental-webgl", {
-                antialias: true
-            });
-        } catch (e) {
-            alert("You are not webgl compatible :(");
-            return false;
-        }
-    },
-    //situa el canvas en la ventana
-    editCanvas: function(CANVAS, id) {
-        CANVAS = document.getElementById(id);
-        CANVAS.width = window.innerWidth;
-        CANVAS.height = window.innerHeight;
-        return CANVAS;
-    },
     //convierte de grado deg a grados Rad.
     degToRad: function(angle) {
         return (angle * Math.PI / 180);
     },
-
     //devuevle matriz de proyeccion con un angulo con una distancia un left y un right
     get_projection: function(angle, a, zMin, zMax) {
         var tan = Math.tan(LIBS.degToRad(0.5 * angle)),

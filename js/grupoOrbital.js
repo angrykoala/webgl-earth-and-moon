@@ -1,37 +1,52 @@
 //by @demiurgosoft and @softwarejimenez
-/*========================= THE sphere ========================= */
-//definimos el modelo:
-//con las variables de identificadores de buffer de vertices y caras
-//definimos las coordenasda de los vertices y de textura
-function GrupoOrbital (GL,resx,resy,radiusPlaneta,radiusSatelite,texturaPlaneta,texturaSatelite){
-    this.planeta=new astro(GL,resx,resy,radiusPlaneta,texturaPlaneta);
-    this.satelite=new astro(GL,resx,resy,radiusSatelite,texturaSatelite);
+/*========================= GrupoOrbital ========================= */
+function GrupoOrbital (GL,resx,resy,radiusPlaneta,texturaPlaneta){
+    this.planeta=new Astro(GL,resx,resy,radiusPlaneta,texturaPlaneta);
+    //conjunto de satelites, cada uno tiene una distancia y un incremento para posicionarlo.
+    this.satelites = [];
+    this.distancias=[];
+    this.incremento= [];
 
-    this.rotacionSatelite=function(incremento){
-        //modificmoas matriz de modelado de la luna si no se ha hecho click
+    //funcion para añadir un satelite
+    this.addSatelite=function(GL,resx,resy,radiusSatelite,texturaSatelite,distancia){
+        var satelite=new Astro(GL,resx,resy,radiusSatelite,texturaSatelite);
+        this.satelites.push(satelite);
+        this.distancias.push(distancia);
+        this.incremento.push(0);
+    };
+
+    //rotacion de un satelite.
+    this.rotacionSatelite=function(index){
+        //modificmoas matriz de modelado de un satelite si no se ha hecho click
         if (!raton.click) {
-            if (incremento <= 2 * Math.PI) {
-                incremento += 0.005;
+            if (this.incremento[index] <= 2 * Math.PI) {
+                this.incremento[index] += 0.005;
             } else {
-                incremento = 0;
+                this.incremento[index] = 0;
             }
         }
-        var pos_x = (-6) * Math.cos(incremento);
-        var pos_z = 6 * Math.sin(incremento);
-        LIBS.set_position(this.satelite.matrix, pos_x, 0, pos_z); //ponemos la luna a la izq
-        return incremento;
+        //posicionamos el satelite
+        var pos_x = (-this.distancias[index]) * Math.cos(this.incremento[index]);
+        var pos_z = this.distancias[index] * Math.sin(this.incremento[index]);
+        LIBS.set_position(this.satelites[index].matrix, pos_x, 0, pos_z); //ponemos el satelite a la izq
     };
+    //rotacion de un planta sobre si mismo
     this.rotacionPlaneta=function(dt){
-        //modificmoas matriz de modelado de la tierra
+        //modificmoas matriz de modelado del planeta
         LIBS.rotateY(this.planeta.matrix, dt * 0.001);
     };
-    this.rotacion=function(incremento,dt){
-        incremento=this.rotacionSatelite(incremento);
+    //animoamos el sistema solar
+    this.animar=function(dt){
+        for	(index = 0; index < this.satelites.length; index++) {
+            this.rotacionSatelite(index);
+        }
         this.rotacionPlaneta(dt);
-        return incremento;
     };
+    //dibujamos el sistma solar
     this.draw=function(){
         this.planeta.draw();
-        this.satelite.draw();
+        for	(index = 0; index < this.satelites.length; index++) {
+            this.satelites[index].draw();
+        }
     };
 };
