@@ -9,6 +9,6 @@ function Astro (GL,resx,resy,radius,nombre_textura){
 
     //funcion dibujar
     this.draw=function(){
-        this.esfera.draw(this.textura,this.matrix);
+        this.esfera.draw(GL,this.textura,this.matrix);
     };
 };

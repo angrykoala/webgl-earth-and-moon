@@ -1,6 +1,24 @@
 //by @demiurgosoft and @softwarejimenez
 //recoge un conjunto de funciones basicas.
 var LIBS = {
+    getContext: function(CANVAS) {
+          var GL;
+          try {
+            GL = CANVAS.getContext("experimental-webgl", {antialias: true});
+            return GL;
+          } catch (e) {
+            alert("You are not webgl compatible ") ;
+            return false;
+          }
+
+    },
+    //situa el canvas en la ventana
+    editCanvas: function(CANVAS,id) {
+        CANVAS = document.getElementById(id);
+        CANVAS.width = window.innerWidth;
+        CANVAS.height = window.innerHeight;
+        return CANVAS;
+    },
     //convierte de grado deg a grados Rad.
     degToRad: function(angle) {
         return (angle * Math.PI / 180);

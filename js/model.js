@@ -66,7 +66,7 @@ function modelo (){
         GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, this.SPHERE_FACES);
         GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16Array(faces), GL.STATIC_DRAW);
     };
-    this.draw=function (texture,matrixModelo ) {
+    this.draw=function (GL,texture,matrixModelo ) {
 
         GL.uniformMatrix4fv(shaders._Mmatrix, false, matrixModelo); //le pasamos al shader matriz de modelado
         if (texture.webglTexture) { //le pasamos la textura

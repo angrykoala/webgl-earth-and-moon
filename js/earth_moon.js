@@ -1,7 +1,9 @@
 //by @demiurgosoft and @softwarejimenez
 function main() {
 
-    Opengl.editCanvas(CANVAS, "your_canvas");
+    //variables necesarias
+    var CANVAS, GL;
+    CANVAS=LIBS.editCanvas(CANVAS, "your_canvas");
     GL = LIBS.getContext(CANVAS);
 
     var resx = 20;
