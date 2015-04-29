@@ -1,3 +1,4 @@
+//by @demiurgosoft and @softwarejimenez
 /*========================= SHADERS ========================= */
 //clase para gestion de los shader.
 //declaramos la matriz de proyeccion,visualizacion y de modelado

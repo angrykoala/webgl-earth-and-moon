@@ -1,3 +1,4 @@
+//by @demiurgosoft and @softwarejimenez
 /*========================= MATRIX ========================= */
 //Definimos matriz de proyeccion, modelo y vista
 var matrix = {

@@ -1,3 +1,4 @@
+//by @demiurgosoft and @softwarejimenez
 /*========================= TEXTURES ========================= */
 //creamos la textura a paritr de una imagen.
 var texture = {

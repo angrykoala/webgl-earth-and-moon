@@ -1,4 +1,4 @@
-
+//by @demiurgosoft and @softwarejimenez
 /*========================= THE sphere ========================= */
 //definimos el modelo:
 //con las variables de identificadores de buffer de vertices y caras
