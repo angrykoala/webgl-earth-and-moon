@@ -103,5 +103,17 @@ var LIBS = {
     },
     translateX: function(m, t) {
         m[12] += t;
+    },
+    multiplicar: function( m1,m2 ){
+	  var m_res = LIBS.get_I4();
+	  for( var i = 0;i<4;i++ ){
+	     for( var j = 0; j<4;j++ ){
+			 m_res[ i*4 + j ] = 0;
+			for( var k = 0; k<4;k++ ){
+				m_res[ i*4 + j ] += ( m1[ i*4 + k ] * m2[ k*4 + j ]);
+			}
+		 }
+	  }
+	  return m_res;
     }
 };

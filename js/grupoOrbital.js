@@ -12,7 +12,7 @@ function GrupoOrbital (GL,resx,resy,radiusPlaneta,texturaPlaneta){
         var satelite=new Astro(GL,resx,resy,radiusSatelite,texturaSatelite);
         this.satelites.push(satelite);
         this.distancias.push(distancia);
-        this.incremento.push(0);
+        this.incremento.push(Math.PI/2);
     };
 
     //rotacion de un satelite.
@@ -25,10 +25,14 @@ function GrupoOrbital (GL,resx,resy,radiusPlaneta,texturaPlaneta){
                 this.incremento[index] = 0;
             }
         }
-        //posicionamos el satelite
-        var pos_x = (-this.distancias[index]) * Math.cos(this.incremento[index]);
-        var pos_z = this.distancias[index] * Math.sin(this.incremento[index]);
-        LIBS.set_position(this.satelites[index].matrix, pos_x, 0, pos_z); //ponemos el satelite a la izq
+
+
+        var matrix_trans = LIBS.get_I4();
+		var matrix_rot = LIBS.get_I4();
+		LIBS.translateZ( matrix_trans, this.distancias[index] );
+		LIBS.rotateY( matrix_rot,this.incremento[index]);
+
+        this.satelites[index].matrix = LIBS.multiplicar( matrix_trans,matrix_rot );
     };
     //rotacion de un planta sobre si mismo
     this.rotacionPlaneta=function(dt){
